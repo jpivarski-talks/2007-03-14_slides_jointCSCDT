@@ -1,0 +1,148 @@
+\documentclass[compress]{beamer}
+\usepackage{ifthen}
+
+\title{CSC Slides for the \\ DT/CSC Joint Alignment Meeting}
+\author{Jim Pivarski}
+\institute{Texas A\&M University}
+\date{14 March, 2007}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{\includegraphics[height=1 cm]{../cmslogo} \hspace{0.1 cm} \includegraphics[height=1 cm]{../tamulogo} \hfill
+\begin{minipage}{9 cm}
+\vspace{-0.75 cm} \small
+\begin{center}
+\ifthenelse{\equal{\insertpagenumber}{1}}{}{\insertsection}
+\end{center}
+\end{minipage} \hfill
+\begin{minipage}{1 cm}
+\vspace{-0.75 cm} \small
+\begin{center}
+\ifthenelse{\equal{\insertpagenumber}{1}}{}{\insertpagenumber/\pageref{numpages}}
+\end{center}
+\end{minipage}}
+
+%% \xdefinecolor{verylightgray}{rgb}{0.95,0.95,0.95}
+%% \beamertemplateshadingbackground{verylightgray}{white}
+
+\begin{document}
+\frame{\titlepage}
+\section*{Slides for DT/CSC Alignment --- Jim Pivarski}
+
+\begin{frame}
+\frametitle{Proposed Division of Labor}
+
+Split workload between two tasks of common interest, \\ rather than A\&M$\to$CSC, Santander$\to$DT
+
+\vfill
+\begin{itemize}\setlength{\itemsep}{0.75 cm}
+\item Definition of Data Stream (AlCaReco):
+
+\vspace{0.25 cm}
+largely Santander group, accepting requests from A\&M \\ (next slide)
+\item Monitoring Alignment Quality:
+
+\vspace{0.25 cm}
+largely A\&M, accepting requests from Santander group \\ (e.g.\ requests for plots)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Our Requests for Muon AlCaReco Stream}
+
+ROOT branches:
+
+\vfill
+\begin{minipage}{\linewidth}
+\tiny
+\begin{tabular}{l l}
+\vspace{0.15 cm} edmHepMCProduct\_VtxSmeared                                  &Monte Carlo truth \\
+CSCDetIdCSCRecHit2DsOwnedRangeMap\_csc2DRecHits              &CSC ``2D hits'' \\
+CSCDetIdCSCSegmentsOwnedRangeMap\_cscSegments                &CSC segments \\
+DTLayerIdDTRecHit1DPairsOwnedRangeMap\_dt1DRecHits           &DT 1D hits \\
+DTSuperLayerIdDTSLRecSegment2DsOwnedRangeMap\_dt2DSegments   &DT 2D segments \\
+\vspace{0.15 cm} DTChamberIdDTRecSegment4DsOwnedRangeMap\_dt4DSegments        &DT 4D segments \\
+recoTracks\_ctfWithMaterialTracks                            &tracker tracks \\
+recoTrackExtras\_ctfWithMaterialTracks                       &\ldots with all associated info \\
+\vspace{0.15 cm} TrackingRecHitsOwned\_ctfWithMaterialTracks                  &\ldots including the associated hits \\
+recoTracks\_standAloneMuons                                  &standAloneMuon tracks \\
+recoTrackExtras\_standAloneMuons                             &\ldots with all associated info \\
+\vspace{0.15 cm} TrackingRecHitsOwned\_standAloneMuons                        &\ldots including the associated hits \\
+recoMuons\_globalMuons                                       &globalMuon reconstructed objects \\
+recoTracks\_globalMuons                                      &globalMuon tracks \\
+recoTrackExtras\_globalMuons                                 &\ldots with all associated info \\
+\vspace{0.15 cm} TrackingRecHitsOwned\_globalMuons                            &\ldots including the associated hits \\
+SiPixelClusteredmDetSetVector\_siPixelClusters               &tracker clusters needed for TrackRefitter \\
+SiStripClusteredmDetSetVector\_siStripClusters               &\ldots when refitting globalMuons \\
+\end{tabular}
+\end{minipage}
+
+\vfill Select $Z$, $W$, $J/\psi$, $b\to\mu X$, ``good muon'' events and tracks, \\ loose in AlCaReco, tight in alignment, same modules
+\end{frame}
+
+\begin{frame}
+\frametitle{Monitoring Alignment Quality}
+
+Two kinds of monitoring:
+
+\vspace{0.2 cm}
+\begin{itemize}\setlength{\itemsep}{0.4 cm}
+\item Sanity checks in AlignmentProducer, checks correctness of AlignmentProducer algorithms
+\item Global monitoring: independent module which compares geometries read from database (or SQLite file)
+
+\vspace{0.2 cm}
+\begin{itemize}\setlength{\itemsep}{0.3 cm}
+  \item Alignment versus time
+  \item Survey, photogrammetry, hardware alignment, track-based
+  \item $Z\to\mu\mu$, $J/\psi\to\mu\mu$ resolution
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Global Monitoring}
+
+Dmitry Yakorev (grad student) and Jim Pivarski are working on:
+\begin{enumerate}
+\item ROOT-based tool which reads database/SQLite files twice (runs cmsRun twice, makes plots) \hfill $\sim$1 month\textcolor{white}{s}
+\item Formal development in DQM framework \hfill $\sim$2 months
+\end{enumerate}
+
+\vfill Study of HIP procedure will drive development of plots, \\ but it will include at least the following:
+\begin{itemize}
+\item Alignment differences versus ring, disk, station (no tracks)
+\item Residuals versus $x$, $y$, $z$
+\item ``Overlap plots'' local alignment differences between
+overlapping chambers in the same station \\ (tracks are only locally
+propagated)
+\item $Z$, $J/\psi$ reconstructed with standalone muons
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Related A\&M Activities}
+
+CSC hardware alignments $\to$ the database (also Dmitry and Jim)
+
+\vspace{0.1 cm}
+\begin{itemize}\setlength{\itemsep}{0.25 cm}
+\item Layer-by-layer corrections measured at CSC assembly sites
+(offsets were rediscovered by Karoly Banicz in MTCC data)
+\begin{enumerate}
+\item Compare two SQLite alignments \hfill this week
+\item Write a dummy layer-by-layer into SQLite \hfill $+$a few days
+\item Get and understand layer-by-layer \hfill $+$several weeks \\ measurements from Andrey Korytov
+\item Test layer-by-layer SQLite file in Karoly's \hfill $+$a week \\ MTCC procedure
+\end{enumerate}
+\item Interface between COCOA CSC output and database
+\begin{enumerate}
+\item Communicate with Marcus Hohlmann about COCOA output
+\item Collaborate on software development
+\end{enumerate}
+\end{itemize}
+
+\vspace{0.1 cm} Monitoring tools are tightly coupled to these efforts
+
+\label{numpages}
+\end{frame}
+
+\end{document}
